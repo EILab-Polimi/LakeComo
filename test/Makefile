@@ -7,10 +7,10 @@ CXX           = g++
 CXXFLAGS      = -c -Wall 
 
 ####### Compile
-all: LakeComoSim 
+all: SimLakeComo
 
-LakeComoSim: main_lakecomo.o model_lakecomo.o param_function.o ncRBF.o rbf.o catchment.o lake.o lakecomo.o moeaframework.o utils.o
-	$(CXX) main_lakecomo.o model_lakecomo.o param_function.o ncRBF.o rbf.o catchment.o lake.o lakecomo.o moeaframework.o utils.o -o LakeComoSim
+SimLakeComo: main_lakecomo.o model_lakecomo.o param_function.o ncRBF.o linRBF.o rbf.o catchment.o lake.o lakecomo.o moeaframework.o utils.o
+	$(CXX) main_lakecomo.o model_lakecomo.o param_function.o ncRBF.o linRBF.o rbf.o catchment.o lake.o lakecomo.o moeaframework.o utils.o -o SimLakeComo
 
 
 main_lakecomo.o: main_lakecomo.cpp ../src/model_lakecomo.h \
@@ -22,12 +22,17 @@ model_lakecomo.o: ../src/model_lakecomo.cpp ../src/lake.h \
 	../src/catchment.h \
 	../src/param_function.h \
 	../src/ncRBF.h \
+	../src/linRBF.h \
 	../src/rbf.h 
 	$(CXX) $(CXXFLAGS) ../src/model_lakecomo.cpp
 
 ncRBF.o: ../src/ncRBF.cpp ../src/ncRBF.h \
 	../src/param_function.h
 	$(CXX) $(CXXFLAGS) ../src/ncRBF.cpp
+
+linRBF.o: ../src/linRBF.cpp ../src/linRBF.h \
+	../src/param_function.h
+	$(CXX) $(CXXFLAGS) ../src/linRBF.cpp
 
 rbf.o: ../src/rbf.cpp ../src/rbf.h \
 	../src/param_function.h
@@ -54,5 +59,5 @@ utils.o: ../src/utils.cpp ../src/utils.h
 
 clean:
 	rm -rf *.o 
-	rm LakeComoSim
+	rm SimLakeComo
 

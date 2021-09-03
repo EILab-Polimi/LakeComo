@@ -17,6 +17,7 @@
 #include "param_function.h"
 #include "rbf.h"
 #include "ncRBF.h"
+#include "linRBF.h"
 
 namespace std{
 
@@ -72,7 +73,6 @@ protected:
         vector<vector<double> > level_areaFlood;    // level (cm) - flooded area in Como (m2)
         vector<double> demand;                      // total downstream demand (m3/s)
         double h_flo;       // flooding threshold
-        double inflow00;    // previous day inflow
 
         /**
          * function to perform the simulation over the scenario ps

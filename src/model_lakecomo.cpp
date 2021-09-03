@@ -46,8 +46,11 @@ model_lakecomo::model_lakecomo(string filename){
     if (p_param.tPolicy == 4) {
         param_function* mp4 = new ncRBF(p_param.policyInput,p_param.policyOutput,p_param.policyStr);
         mPolicy = mp4;
+    }else if(p_param.tPolicy == 7){
+        param_function* mp7 = new linRBF(p_param.policyInput,p_param.policyOutput,p_param.policyStr);
+        mPolicy = mp7;   
     }else{
-        cout << "Unable to open file";
+        cout << "Error: policy architecture not defined";
     }
 
     // min-max policy input
@@ -108,7 +111,7 @@ vector<double> model_lakecomo::simulate(int ps){
     vector<double> doy (H,-999) ;
 
     // simulation variables
-    double qIn, qIn_1;      // daily inflow (today and yesterday)
+    double qIn;      // daily inflow 
     vector<double> sh_rh;   // storage and release resulting from hourly integration
     vector<double> uu;      // decision vector
     vector<double> input;   // policy input vector
@@ -117,7 +120,6 @@ vector<double> model_lakecomo::simulate(int ps){
     // initial condition
     h[0] = LakeComo->getInitCond();
     s[0] = LakeComo->levelToStorage(h[0]);
-    qIn_1 = inflow00 ;
     
     // exogeneous information
     vector<double> qForecast = utils::loadVector("../data/qSimAnomL51.txt", H); // perfect forecast of 51-day cumulated streamflow 
@@ -135,7 +137,8 @@ vector<double> model_lakecomo::simulate(int ps){
         input.push_back( sin( 2*PI*doy[t]/T) );
         input.push_back( cos( 2*PI*doy[t]/T) );
         input.push_back( h[t] );
-        input.push_back( qForecast[t] );
+        if( p_param.policyInput > 3 )
+        	input.push_back( qForecast[t] );
         
         uu = mPolicy->get_NormOutput(input);
         u[t] = uu[0]; // single release decision
@@ -147,7 +150,6 @@ vector<double> model_lakecomo::simulate(int ps){
         s[t+1] = sh_rh[0];
         r[t+1] = sh_rh[1];
         h[t+1] = LakeComo->storageToLevel(s[t+1]);
-        qIn_1 = qIn;
 
         // clear subdaily values
         sh_rh.clear();
@@ -329,15 +331,6 @@ void model_lakecomo::readFileSettings(string filename){
         in >> sJunk;
     }
     in >> Como_param.initCond;
-    //Return to the beginning of the file
-    in.seekg(0, ios::beg);
-
-    //Look for the <INIT_INFLOW> key
-    while (sJunk != "<INIT_INFLOW>")
-    {
-        in >> sJunk;
-    }
-    in >> inflow00;
     //Return to the beginning of the file
     in.seekg(0, ios::beg);
 

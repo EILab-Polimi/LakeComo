@@ -1,4 +1,4 @@
-# Lake Como Problem: 1 year simulation (using inflows simulated by HBV model)
+# Lake Como Simulation: 1 year simulation (using inflows simulated by HBV model)
 
 # Problem setting
 <NUM_SIM>           1           # number of simulations to run
@@ -6,7 +6,7 @@
 <PERIOD>            365         # period
 <INTEGRATION>       24          # number of sub-daily steps
 <SIM_HORIZON>       365        # simulation horizon
-<NUM_VAR>           46          # number of decision variables
+<NUM_VAR>           32          # number of decision variables
 <NUM_OBJ>           2           # number of objectives
 <WARMUP>            0           # number of days of warmup, not considered in obj evaluations
 <DOY>               1           # day-of-year: 0 = doy loaded from file, otherwise it sets the first day of simulation (no leap years)
@@ -17,16 +17,14 @@
 
 # initial conditions
 <INIT_CONDITION>    0.35
-<INIT_INFLOW>       20.0
 
 # operating policy
-<POLICY_CLASS>      4               # class of policy: 4 = non-convex RBF 
-<NUM_INPUT>         4               # number of policy input and corresponding ranges
+<POLICY_CLASS>      7               # class of policy: 4 = non-convex RBF, 7 = RBF with linear parameter
+<NUM_INPUT>         3               # number of policy input and corresponding ranges
     -1      1
     -1      1
     -0.5    1.3
-    -3595.9     1484.1		
 <NUM_OUTPUT>        1               # number of policy output and corresponding ranges
     0.0     491.61
-<POLICY_STRUCTURE>  5               # policy architecture (e.g., number of RBF,ANN,É)
+<POLICY_STRUCTURE>  4               # policy architecture (e.g., number of RBF,ANN,É)
 
