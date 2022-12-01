@@ -73,6 +73,10 @@ protected:
         vector<vector<double> > level_areaFlood;    // level (cm) - flooded area in Como (m2)
         vector<double> demand;                      // total downstream demand (m3/s)
         double h_flo;       // flooding threshold
+        vector<double> h_lowLevel;                  // low levels (10th percentile of historical levels)
+        vector<double> qnat_pStd;                   // mean natural outflow + 1 std (m3/s)
+        vector<double> qnat_mStd;                   // mean natural outflow - 1 std (m3/s)
+        
 
         /**
          * function to perform the simulation over the scenario ps
@@ -84,6 +88,13 @@ protected:
          **/
          double floodDays(vector<double> h, double h_flo);
          double avgDeficitBeta(vector<double> q, vector<double> w, vector<double> doy);
+         double stReliability(vector<double> h, double h_flo);
+         double volReliability(vector<double> q, vector<double> w, vector<double> doy);
+         double lowLevReliability(vector<double> h, vector<double> h_low, vector<double> doy);
+         double envReliability(vector<double> q, vector<double> x_pStd, vector<double> x_mStd, vector<double> doy);
+         double equityIndex(vector<double> g);
+
+         
 };
 
 }

@@ -61,6 +61,9 @@ model_lakecomo::model_lakecomo(string filename){
     // OBJECTIVES
     h_flo = 1.24 ;
     demand = utils::loadVector("../data/comoDemand.txt", 365);
+    h_lowLevel = utils::loadVector("../data/low_levels.txt", 365);
+    qnat_pStd = utils::loadVector("../data/nat_rel_pStd.txt", 365);
+    qnat_mStd = utils::loadVector("../data/nat_rel_mStd.txt", 365);
 
 }
 
@@ -121,8 +124,6 @@ vector<double> model_lakecomo::simulate(int ps){
     h[0] = LakeComo->getInitCond();
     s[0] = LakeComo->levelToStorage(h[0]);
     
-    // exogeneous information
-    vector<double> qForecast = utils::loadVector("../data/qSimAnomL51.txt", H); // perfect forecast of 51-day cumulated streamflow 
     
     // Run simulation:
     for(unsigned int t = 0; t < H; t++){
@@ -137,9 +138,6 @@ vector<double> model_lakecomo::simulate(int ps){
         input.push_back( sin( 2*PI*doy[t]/T) );
         input.push_back( cos( 2*PI*doy[t]/T) );
         input.push_back( h[t] );
-        if( p_param.policyInput > 3 )
-        	input.push_back( qForecast[t] );
-        
         uu = mPolicy->get_NormOutput(input);
         u[t] = uu[0]; // single release decision
 
@@ -167,10 +165,21 @@ vector<double> model_lakecomo::simulate(int ps){
     //utils::logVector(h,"./logs/levTraj19962008.txt");
     //utils::logVector(r,"./logs/relTraj19962008.txt");
 
-    // compute objectives
-    int NYears = H/T; // number of years
-    JJ.push_back( floodDays( h, h_flo )/NYears );       // mean annual number of flood days
-    JJ.push_back( avgDeficitBeta(r,demand,doy) );      // daily average squared deficti
+    // compute 4 objectives
+    JJ.push_back( -1*stReliability(h, h_flo) );
+    JJ.push_back( -1*volReliability(r, demand, doy) );
+    JJ.push_back( -1*lowLevReliability(h, h_lowLevel, doy) );
+    JJ.push_back( -1*envReliability( r, qnat_pStd, qnat_mStd, doy) );
+
+    // add equity index as additional objective
+    vector<double> relall;
+    relall.push_back( 1*stReliability(h, h_flo) );
+    relall.push_back( 1*volReliability(r, demand, doy) );
+    relall.push_back( 1*lowLevReliability(h, h_lowLevel, doy) );
+    relall.push_back( 1*envReliability( r, qnat_pStd, qnat_mStd, doy) );
+    JJ.push_back( 1*equityIndex(relall) ); 
+
+
     return JJ;
 }
 
@@ -205,6 +214,74 @@ double model_lakecomo::avgDeficitBeta(vector<double> q, vector<double> w, vector
     }
     return gt/q.size();
 }
+
+double model_lakecomo::stReliability(vector<double> h, double h_flo){
+
+    double c=0.0;
+    for(unsigned int i=0; i<h.size(); i++){
+        if(h[i]>h_flo){
+            c=c+1;
+        }
+    }
+    double G = 1 - c/h.size();
+    return G;
+}
+
+double model_lakecomo::volReliability(vector<double> q, vector<double> w, vector<double> doy){
+    vector<double> g;
+    double delta = 24*3600;
+    double G, f, qdiv;
+    for(unsigned int i=0; i<q.size(); i++){
+        qdiv = q[i] - LakeComo->getMEF(doy[i]-1);
+        f = (qdiv*delta)/(w[doy[i]-1]*delta) ;
+        if(f<1){
+            g.push_back(f);
+        }else{
+            g.push_back(1);
+        }
+    }
+    G = utils::computeMean(g); // mean or sum???
+    return G;
+
+}
+
+double model_lakecomo::lowLevReliability(vector<double> h, vector<double> h_low, vector<double> doy){
+
+    double c=0.0;
+    for(unsigned int i=0; i<h.size(); i++){
+        if(h[i]<h_low[doy[i]-1]){
+            c=c+1;
+        }
+    }
+    double G = 1 - c/h.size();
+    return G;
+
+}
+
+double model_lakecomo::envReliability(vector<double> q, vector<double> x_pStd, vector<double> x_mStd, vector<double> doy){
+
+    double c=0.0;
+    for(unsigned int i=0; i<q.size(); i++){
+        if( (q[i]<x_mStd[doy[i]-1]) || (q[i]>x_pStd[doy[i]-1]) ) {
+            c=c+1;
+        }
+    }
+    double G = 1 - c/q.size();
+    return G;
+
+}
+
+double model_lakecomo::equityIndex(vector<double> g){
+    
+    double Exp, Var, Std, Equ;
+    Exp = utils::computeMean(g); 
+    Var = utils::computeVariance(g);
+    Std = pow(Var, 0.5);
+    Equ = Std/Exp;
+    return Equ;
+
+}
+
 
 void model_lakecomo::readFileSettings(string filename){
 
