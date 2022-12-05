@@ -10,17 +10,12 @@ To compile and run:
 
 The simulation is performed using a 1 year trajectory of inflow data simulated by a hydrologic model; the mass balance equation of the lake storage is integrated over time with a hourly time step; the daily release decision is determined by a Gaussian Radial Basis Function with 3 inputs (i.e. sine and cosine of the day of the year, lake level), 1 output, and 4 Gaussian bases, for a total of 29 policy parameters (decision variables). See the settings files in the test folder for further details.
 The observed inflows used in the paper are from [Consorzio dell'Adda](http://www.addaconsorzio.it/). 
+The full set of results and the code to reproduce the figures of the paper are available [HERE](https://polimi365-my.sharepoint.com/:f:/g/personal/10821937_polimi_it/ErEcif74xMVAtKXh9i1PScQBJBlMRnP98h695sQj1wPwtg?e=XGQ10P) 
 
 
 **References:**
 
-Giuliani, M., M. Zaniolo, A. Castelletti, G. Davoli, and P. Block (2019), [Detecting the state of the climate system via artificial intelligence to improve seasonal forecasts and inform reservoir operations](https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2019WR025035), Water Resources Research, 55 - The full set of results are available in the [paper branch](https://github.com/mxgiuliani00/LakeComo/tree/Giuliani2019WRR-Giuliani2020HESS).
-
-Giuliani, M., L. Crochemore, I. Pechlivanidis, and A. Castelletti (2020), [From skill to value: isolating the influence of end-user behaviour on seasonal forecast assessment](https://hess.copernicus.org/articles/24/5891/2020/), Hydrology and Earth System Sciences, 24 - The full set of results are available in the [paper branch](https://github.com/mxgiuliani00/LakeComo/tree/Giuliani2019WRR-Giuliani2020HESS).
-
-Yang, G., M. Giuliani, and A. Castelletti (2022), [Operationalizing equity in multipurpose water systems](https://hess.copernicus.org/preprints/hess-2022-99/), Hydrology and Earth System Sciences (see https://polimi365-my.sharepoint.com/:f:/g/personal/10821937_polimi_it/ErEcif74xMVAtKXh9i1PScQBJBlMRnP98h695sQj1wPwtg?e=XGQ10P for the whole data and code files)
-
-
+Yang, G., M. Giuliani, and A. Castelletti (2022), [Operationalizing equity in multipurpose water systems](https://hess.copernicus.org/preprints/hess-2022-99/), Hydrology and Earth System Sciences.
 
 ----
 **Copyright:**
