@@ -18,7 +18,7 @@ Giuliani, M., M. Zaniolo, A. Castelletti, G. Davoli, and P. Block (2019), [Detec
 
 Giuliani, M., L. Crochemore, I. Pechlivanidis, and A. Castelletti (2020), [From skill to value: isolating the influence of end-user behaviour on seasonal forecast assessment](https://hess.copernicus.org/articles/24/5891/2020/), Hydrology and Earth System Sciences, 24 - The full set of results are available in the [paper branch](https://github.com/mxgiuliani00/LakeComo/tree/Giuliani2019WRR-Giuliani2020HESS).
 
-Yang, G., M. Giuliani, and A. Castelletti (2022), [Operationalizing equity in multipurpose water systems](https://hess.copernicus.org/preprints/hess-2022-99/), Hydrology and Earth System Sciences 
+Yang, G., M. Giuliani, and A. Castelletti (2022), [Operationalizing equity in multipurpose water systems](https://hess.copernicus.org/preprints/hess-2022-99/), Hydrology and Earth System Sciences (see https://polimi365-my.sharepoint.com/:f:/g/personal/10821937_polimi_it/ErEcif74xMVAtKXh9i1PScQBJBlMRnP98h695sQj1wPwtg?e=XGQ10P for the whole data and code files)
 
 
 
