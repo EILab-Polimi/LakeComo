@@ -10,7 +10,7 @@ To compile and run:
 
 The simulation is performed using a 1 year trajectory of inflow data simulated by a hydrologic model; the mass balance equation of the lake storage is integrated over time with a hourly time step; the daily release decision is determined by a Gaussian Radial Basis Function with 3 inputs (i.e. sine and cosine of the day of the year, lake level), 1 output, and 4 Gaussian bases, for a total of 29 policy parameters (decision variables). See the settings files in the test folder for further details.
 The observed inflows used in the paper are from [Consorzio dell'Adda](http://www.addaconsorzio.it/). 
-The full set of results and the code to reproduce the figures of the paper are available [HERE](https://polimi365-my.sharepoint.com/:f:/g/personal/10821937_polimi_it/ErEcif74xMVAtKXh9i1PScQBJBlMRnP98h695sQj1wPwtg?e=XGQ10P) 
+The full set of results and the code to reproduce the figures of the paper are available [HERE](https://polimi365-my.sharepoint.com/:f:/g/personal/10821937_polimi_it/ErEcif74xMVAtKXh9i1PScQBJBlMRnP98h695sQj1wPwtg?e=XGQ10P). 
 
 
 **References:**
