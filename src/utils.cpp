@@ -28,7 +28,7 @@ vector<vector<double> > utils::loadMatrix(string file_name, unsigned int row, un
         }
         input.close();
     }
-    else cout << "Unable to open file";
+    else cout << "Unable to open file" <<endl <<file_name <<endl;
 
     return output;
 }
@@ -45,7 +45,7 @@ vector<double> utils::loadVector(string file_name, unsigned int l){
         }
         input.close();
     }
-    else cout << "Unable to open file1";
+    else cout << "Unable to open file" <<endl <<file_name <<endl;
 
     return output;
 }
@@ -61,7 +61,7 @@ void utils::loadArray(string file_name, unsigned int l, double *pArray){
         }
         input.close();
     }
-    else cout << "Unable to open file1";
+    else cout << "Unable to open file" <<endl <<file_name <<endl;
 
 }
 
