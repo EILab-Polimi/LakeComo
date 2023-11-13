@@ -215,102 +215,96 @@ vector<double> model_lakecomo::simulate(int ps){
     int NYears = H/T;                                   
     
     // mean annual number of flood days
-    JJ.push_back( floodDays( &h, h_flo )/NYears );       
+    JJ.push_back( floodDays( h, h_flo )/NYears );       
     
     // daily average squared deficit (r_{t+1} should be confronted to demand[doy_{t}])
-    JJ.push_back( avgDeficitBeta(&r,&demand, &doy_file) ); 
+    JJ.push_back( avgDeficitBeta( r, demand, doy_file) ); 
     //JJ.push_back( avgDeficitBeta(&r,&demand,&rain_weight, &doy_file) );      // with time varying exponent loaded from file
 
     // low levels indicator (h_{t+1} should be confronted to s_low[doy_{t+1}])
-    JJ.push_back(staticLow(&h, s_low[0])/NYears);        //static 
+    JJ.push_back(staticLow( h, s_low[0])/NYears);        //static 
     //JJ.push_back(staticLow(&h, &s_low, &doy)/NYears);    //time-varying
     return JJ;
 }
 
-double model_lakecomo::floodDays(vector<double> *h, double h_flo){
+double model_lakecomo::floodDays(vector<double>& h, double h_flo){
     
     double c=0.0;
-    for(unsigned int i=0; i<h->size(); i++){
-        if((*h)[i]>h_flo){
+    for(unsigned int i=0; i<h.size(); i++){
+        if(h[i]>h_flo){
             c=c+1;
         }
     }
     return c;
 }
 
-double model_lakecomo::avgDeficitBeta(vector<double> *q, vector<double> *w, vector<double> *doy){
+double model_lakecomo::avgDeficitBeta(vector<double>& q, vector<double>& w, vector<double>& doy){
     
     double d, qdiv;
     double gt = 0.0;
-    for(unsigned int i=0; i<q->size(); i++){ //
-        qdiv = (*q)[i] - LakeComo->getMEF(i);
+    for(unsigned int i=0; i<q.size(); i++){ //
+        qdiv = q[i] - LakeComo->getMEF(i);
         //cout << endl; cout << LakeComo->getMEF(i) << endl;
         if( qdiv<0.0 ){
             qdiv = 0.0;
         }
-        d = (*w)[(*doy)[i]-1] - qdiv;
+        d = w[doy[i]-1] - qdiv;
         if( d < 0.0 ){
             d = 0.0;
         }
-        if( ((*doy)[i] >= 91) && ((*doy)[i] <= 283) ){ // from April to 10th October
+        if( (doy[i] >= 91) && (doy[i] <= 283) ){ // from April to 10th October
             d = d*d;
         }
         //cout << endl; cout << qdiv << " " <<  w[doy[i]-1] << " " << doy[i] << " " << q[i] << endl;
         gt = gt + d ;
     }
-    return gt/q->size();
+    return gt/q.size();
 }
 
-double model_lakecomo::avgDeficitBeta(vector<double> *q, vector<double> *w, vector<double> *rain_weight, vector<double> *doy){
+double model_lakecomo::avgDeficitBeta(vector<double>& q, vector<double>& w, vector<double>& rain_weight, vector<double>& doy){
     
     double d, qdiv;
     double gt = 0.0;
-    for(unsigned int i=0; i<q->size(); i++){ //
-        qdiv = (*q)[i] - LakeComo->getMEF(i);
+    for(unsigned int i=0; i<q.size(); i++){ //
+        qdiv = q[i] - LakeComo->getMEF(i);
         //cout << endl; cout << LakeComo->getMEF(i) << endl;
         if( qdiv<0.0 ){
             qdiv = 0.0;
         }
-        d = (*w)[(*doy)[i]-1] - qdiv;
+        d = w[doy[i]-1] - qdiv;
         if( d < 0.0 ){
             d = 0.0;
         }
-        if( ((*doy)[i] >= 91) && ((*doy)[i] <= 283) ){ // from April to 10th October
-            d = pow(d, 2-(*rain_weight)[i]);
+        if( (doy[i] >= 91) && (doy[i] <= 283) ){ // from April to 10th October
+            d = pow(d, 2-rain_weight[i]);
         }
         //cout << endl; cout << qdiv << " " <<  w[doy[i]-1] << " " << doy[i] << " " << q[i] << endl;
         gt = gt + d ;
     }
-    return gt/q->size();
+    return gt/q.size();
 }
 
-double model_lakecomo::staticLow(vector<double> *h, double hls){
+double model_lakecomo::staticLow(vector<double>& h, double hls){
     
     double c=0.0;
-    for(unsigned int i=0; i<h->size(); i++){
-        if((*h)[i]<hls){
-            
+    for(unsigned int i=0; i<h.size(); i++){
+        if(h[i]<hls){
             c=c+1;
-            
         }
     }
     return c;
-    
 }
 
-double model_lakecomo::staticLow(vector<double> *h, vector<double> *hls, vector<double> *doy){
+double model_lakecomo::staticLow(vector<double>& h, vector<double>& hls, vector<double>& doy){
     
     double c=0.0;
-    for(unsigned int i=0; i<h->size(); i++){
+    for(unsigned int i=0; i<h.size(); i++){
         // cout << endl << "index=" << i <<" doy=" << doy[i] <<" hls=" <<hls[doy[i]-1] <<endl;
-        if((*h)[i]<(*hls)[(*doy)[i]-1]){
-            
+        if(h[i]<hls[doy[i]-1]){
             c=c+1;
-            
         }
     }
     return c;
-    
 }
 
 
