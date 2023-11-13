@@ -157,7 +157,7 @@ vector<double> model_lakecomo::simulate(int ps){
         input.push_back( h[t] );
         // additional signals
         for(unsigned int i= 0; i<Nex ; i++ ){
-            input.push_back( ex_signal[i].getInflow(t,0) );
+            input.push_back( ex_signal.at(i).at(t) );
             //cout <<" " << ex_signal[i].getInflow(t,0) <<endl;
         }
         
@@ -449,16 +449,12 @@ void model_lakecomo::readFileSettings(string filename){
     in >> Nex;
     //cout << "signals: " <<Nex <<endl;
     in.ignore(1000,'\n');
-    catchment_param temp_cp;
-    temp_cp.CM = 1;
     for( int i = 0; i < Nex; i++) {
-        in >> temp_cp.inflow_file.filename;
-        temp_cp.inflow_file.row = 1;
-        temp_cp.inflow_file.col = H;
-        //cout << temp_cp.CM << " " << temp_cp.inflow_file.filename <<endl;
+        std::string file0;
+        in >> file0;
         in.ignore(1000,'\n');
 
-        ex_signal.push_back(catchment(temp_cp));
+        ex_signal.push_back(utils::loadVector(file0,H));
         //cout << " inflow " << ex_signal[i].getInflow(0,0) <<endl;
     }
     //Return to the beginning of the file

@@ -63,8 +63,7 @@ protected:
         catchment* ComoCatchment;
 
         double Nex;             // number of exogenous signals to append to BOP
-        //vector<catchment_param> ex_signal_params;
-        vector<catchment> ex_signal;   // vector of exogneous signals for input policy 
+       vector<vector<double> > ex_signal;   // vector of exogneous signals for input policy 
 
         // reservoir: Lake Como
         reservoir_param Como_param;
