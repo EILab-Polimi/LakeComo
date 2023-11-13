@@ -96,11 +96,11 @@ protected:
         /**
          * Functions to compute the objective functions:
          **/
-         double floodDays(vector<double> *h, double h_flo);
-         double avgDeficitBeta(vector<double> *q, vector<double> *w, vector<double> *doy);
-         double avgDeficitBeta(vector<double> *q, vector<double> *w, vector<double> *rain_weight, vector<double> *doy);
-         double staticLow(vector<double> *h, double s_low);
-         double staticLow(vector<double> *h, vector<double> *s_low, vector<double> *doy);
+         double floodDays(vector<double>& h, double h_flo);
+         double avgDeficitBeta(vector<double>& q, vector<double>& w, vector<double>& doy);
+         double avgDeficitBeta(vector<double>& q, vector<double>& w, vector<double>& rain_weight, vector<double>& doy);
+         double staticLow(vector<double>& h, double s_low);
+         double staticLow(vector<double>& h, vector<double>& s_low, vector<double>& doy);
          
 };
 
