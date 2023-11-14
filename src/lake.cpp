@@ -43,7 +43,7 @@ vector<double> lake::integration( int HH, int tt, double s0, double uu, double n
         if(EV == 1){
             S = this->levelToSurface( this->storageToLevel(s[i]) );
             E = evap_rates[cday-1]/1000 * S /86400;
-        }else if (E>1) {
+        }else if (EV>1) {
             // E = compute_evaporation(); TO BE IMPLEMENTED
         }else{
             E = 0.0;
