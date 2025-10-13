@@ -278,3 +278,13 @@ double utils::generateRandomUnif(double lower_bound, double upper_bound){
     return n;
     
 }
+
+Node::Node() {
+    id = -1;
+    act = act_func::LINEAR;
+    act_s = "LINEAR";
+    agg = agg_func::MEAN;
+    agg_s = "MEAN";
+    bias = 0.0;
+    response = 0.0;
+}

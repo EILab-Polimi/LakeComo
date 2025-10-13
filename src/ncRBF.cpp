@@ -50,6 +50,10 @@ void ncRBF::setParameters(double* pTheta){
     }
 }
 
+void ncRBF::setParameters(vector<int> p_input_nodes, vector<int> p_output_nodes, vector<Node> p_hidden_nodes){
+    // Not implemented
+}
+
 void ncRBF::clearParameters(){
 
     for(unsigned int i=0; i<param.size(); i++){

@@ -54,6 +54,8 @@ public:
      */
     void setParameters(double* pTheta);
 
+    void setParameters(vector<int> p_input_nodes, vector<int> p_output_nodes, vector<Node> p_hidden_nodes);
+
 protected:
     unsigned int N; // number of RBF
     unsigned int M; // number of input

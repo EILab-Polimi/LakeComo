@@ -44,6 +44,11 @@ public:
     virtual void setParameters(double* pTheta) = 0;
 
     /**
+      * Set function parameters
+      **/
+    virtual void setParameters(vector<int> p_input_nodes, vector<int> p_output_nodes, vector<Node> p_hidden_nodes) = 0;
+
+    /**
       * Clear function parameters
       */
     virtual void clearParameters() = 0;

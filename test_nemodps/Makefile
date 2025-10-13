@@ -9,8 +9,8 @@ CXXFLAGS      = -c -Wall
 ####### Compile
 all: LakeComoSim
 
-LakeComoSim: main_lakecomo.o model_lakecomo_nemodps.o param_function.o ncRBF.o linRBF.o rbf.o catchment.o lake.o lakecomo.o moeaframework.o utils.o
-	$(CXX) main_lakecomo.o model_lakecomo_nemodps.o param_function.o ncRBF.o linRBF.o rbf.o catchment.o lake.o lakecomo.o moeaframework.o utils.o -o LakeComoSim
+LakeComoSim: main_lakecomo.o model_lakecomo_nemodps.o param_function.o ncRBF.o linRBF.o rbf.o net.o catchment.o lake.o lakecomo.o moeaframework.o utils.o
+	$(CXX) main_lakecomo.o model_lakecomo_nemodps.o param_function.o ncRBF.o linRBF.o rbf.o net.o catchment.o lake.o lakecomo.o moeaframework.o utils.o -o LakeComoSim
 
 
 main_lakecomo.o: main_lakecomo.cpp ../src/model_lakecomo_nemodps.h \
@@ -23,7 +23,8 @@ model_lakecomo_nemodps.o: ../src/model_lakecomo_nemodps.cpp ../src/lake.h \
 	../src/param_function.h \
 	../src/ncRBF.h \
 	../src/linRBF.h \
-	../src/rbf.h 
+	../src/rbf.h \
+	../src/net.h
 	$(CXX) $(CXXFLAGS) ../src/model_lakecomo_nemodps.cpp
 
 ncRBF.o: ../src/ncRBF.cpp ../src/ncRBF.h \
@@ -37,6 +38,10 @@ linRBF.o: ../src/linRBF.cpp ../src/linRBF.h \
 rbf.o: ../src/rbf.cpp ../src/rbf.h \
 	../src/param_function.h
 	$(CXX) $(CXXFLAGS) ../src/rbf.cpp
+
+net.o: ../src/net.cpp ../src/net.h \
+	../src/param_function.h
+	$(CXX) $(CXXFLAGS) ../src/net.cpp
 
 param_function.o: ../src/param_function.cpp ../src/param_function.h
 	$(CXX) $(CXXFLAGS) ../src/param_function.cpp

@@ -59,6 +59,10 @@ void rbf::setParameters(double* pTheta){
     }
 }
 
+void rbf::setParameters(vector<int> p_input_nodes, vector<int> p_output_nodes, vector<Node> p_hidden_nodes){
+    // Not implemented
+}
+
 void rbf::clearParameters(){
 
     for(unsigned int i=0; i<param.size(); i++){

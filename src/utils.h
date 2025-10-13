@@ -12,6 +12,54 @@ struct myFile{
     int col;
 };
 
+// Activation functions from the FANN library https://github.com/libfann/fann
+enum act_func {
+    IDENTITY,
+    LINEAR,
+    LINEAR_PIECE,
+    LINEAR_PIECE_SYMMETRIC,
+    THRESHOLD,
+    THRESHOLD_SYMMETRIC,
+    SIGMOID,
+    SIGMOID_SYMMETRIC,
+    GAUSSIAN,
+    GAUSSIAN_SYMMETRIC,
+    SOFTSIGN,
+    ELLIOT,
+    ELLIOT_SYMMETRIC,
+    SIN,
+    COS,
+    SIN_SYMMETRIC,
+    COS_SYMMETRIC,
+    RELU,
+    LINEAR_PIECE_RECT,
+    LINEAR_PIECE_RECT_LEAKY,
+    H_TANGENT,
+    H_TANGENT_SYMMETRIC,
+    RBF,
+};
+
+enum agg_func {
+    SUM,
+    MIN,
+    MAX,
+    MEAN,
+    MEDIAN,
+};
+
+class Node {
+public:
+    Node();
+    int id;
+    act_func act;
+    string act_s;
+    agg_func agg;
+    string agg_s;
+    float bias;
+    float response;
+    vector<pair<int,float>> links;
+};
+
 
 class utils
 {
