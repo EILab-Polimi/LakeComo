@@ -9,9 +9,10 @@ The Lake Como system involves numerous economic activities and has been actively
 To compile and run:
 * Run `make` in the test folder to compile
 * Run `./LakeComoSim settings_lakeComoEMODPS.txt < ../data/u_test46.txt` to perform a simulation with a random policy using forecast information
+* Run `./LakeComoSim settings_lakeComoNEMODPS.txt < ../data/u_test46.txt` to perform a simulation with a random NEMODPS policy using forecast information
 * Run `./LakeComoSim settings_lakeComoHistory.txt < ../data/u_32h.txt` to perform a simulation with policy approximating the historcal regulation of the lake
 
-The simulation is performed using a 1 year trajectory of inflow data simulated by a hydrologic model; the mass balance equation of the lake storage is integrated over time with a hourly time step; the daily release decision is determined by a Gaussian Radial Basis Function with 3 or 4 inputs (i.e. sine and cosine of the day of the year, lake level, and possibly a forecast of the cumulated inflows over the next 51 days according to the results of [Denaro et al. 2017](https://www.sciencedirect.com/science/article/pii/S0309170816304651)), 1 output, and 4 or 5 Gaussian bases, for a total of 32 or 46 policy parameters (decision variables). See the settings files in the test folder for further details.
+The simulation is performed using a 1 year trajectory of inflow data simulated by a hydrologic model; the mass balance equation of the lake storage is integrated over time with a hourly time step; the daily release decision is determined by a Gaussian Radial Basis Function with 3 or 4 inputs (i.e. sine and cosine of the day of the year, lake level, and possibly a forecast of the cumulated inflows over the next 51 days according to the results of [Denaro et al. 2017](https://www.sciencedirect.com/science/article/pii/S0309170816304651)), 1 output, and 4 or 5 Gaussian bases, for a total of 32 or 46 policy parameters (decision variables), or the release decision may be determined by a random policy obtained with NEMODPS. See the settings files in the test folder for further details.
 The observed inflows used in the paper are from [Consorzio dell'Adda](http://www.addaconsorzio.it/). 
 
 

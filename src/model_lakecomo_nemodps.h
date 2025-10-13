@@ -3,8 +3,10 @@
  *
  *  Created on: 7/oct/2014
  *      Author: MatteoG
- * Updated on: 28/02/2022
+ *  Updated on: 28/02/2022
  *      Author: DennisZ
+ *  Updated on: 11/10/2025
+ *      Author: DavideS
  */
 
 #ifndef model_lakecomo_H_
@@ -20,6 +22,7 @@
 #include "rbf.h"
 #include "ncRBF.h"
 #include "linRBF.h"
+#include "net.h"
 
 namespace std{
 
@@ -43,6 +46,8 @@ public:
          *  - obj = objectives
         */
         void evaluate(double* var, double* obj);
+
+        void evaluate_with_nemodps(double* var, double* obj, vector<int> p_input_nodes, vector<int> p_output_nodes, vector<Node> p_hidden_nodes);
 
 protected:
         void readFileSettings(string filename);
@@ -101,7 +106,8 @@ protected:
          double avgDeficitBeta(vector<double>& q, vector<double>& w, vector<double>& rain_weight, vector<double>& doy);
          double staticLow(vector<double>& h, double s_low);
          double staticLow(vector<double>& h, vector<double>& s_low, vector<double>& doy);
-         
+
+         void evaluate_inner(double *obj);
 };
 
 }

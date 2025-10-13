@@ -3,8 +3,10 @@
  *
  *  Created on: 14/oct/2014
  *      Author: MatteoG
- * Updated on: 28/02/2022
+ *  Updated on: 28/02/2022
  *      Author: DennisZ
+ *  Updated on: 11/10/2025
+ *      Author: DavideS
  */
 
 
@@ -48,6 +50,9 @@ model_lakecomo::model_lakecomo(string filename){
     if (p_param.tPolicy == 4) {
         param_function* mp4 = new ncRBF(p_param.policyInput,p_param.policyOutput,p_param.policyStr);
         mPolicy = mp4;
+    }else if(p_param.tPolicy == 5){
+        param_function* mp5 = new net();
+        mPolicy = mp5;
     }else if(p_param.tPolicy == 7){
         param_function* mp7 = new linRBF(p_param.policyInput,p_param.policyOutput,p_param.policyStr);
         mPolicy = mp7;   
@@ -86,34 +91,23 @@ int model_lakecomo::getNvar() {
 void model_lakecomo::evaluate(double* var, double* obj){
     // set CONTROL POLICY
     mPolicy->setParameters(var);
-    // "Process the raw data" (actually only choose the input and the column)
-    int nRaw = p_param.policyInput-3-Nex; // Remove from the number of input 
-    // the 3 base signals (sin, cos, h) and the exogenous signals to append after those.
-    // A more robust way would be to use the size of mPolicy and keep going from there... 
-    
-    // For each input I need to select which raw signal to use and which column of that signal
-    // We use the column to perform all the operations in pre-processing instead of doing them 
-    // at computing time (which is slower)
-    for (std::size_t i=0; i<nRaw; ++i) {
-        int j = (Nvar-2*nRaw)  +i*2;
-        
-        // Which signal you select
-        int raw_data_idx = (int)floor(var[j]);
+    evaluate_inner(obj);
+}
 
-        // Which column for that signal you select
-        int nRaw_data_cols = raw_data[raw_data_idx][0].size();
-        int raw_data_col = (int)floor(var[j+1]*nRaw_data_cols); 
 
-        // Just copy at the correct column
-        vector<double> temp0(H,0.0);
-        for (std::size_t k=0; k<H; ++k) { // for each timestep (row
-            temp0[k] = raw_data[raw_data_idx][k][raw_data_col];
-        }
-        processed_data.push_back(temp0);
-        cout << "raw_data_idx: " << raw_data_idx << " raw_data_col: " << raw_data_col << endl;
-        //cout << "size: " << processed_data.at(i).size() << endl;
+void model_lakecomo::evaluate_with_nemodps(double* var, double* obj, vector<int> p_input_nodes, vector<int> p_output_nodes, vector<Node> p_hidden_nodes) {
+    // set CONTROL POLICY
+    if (p_param.tPolicy != 5) {
+        mPolicy->setParameters(var);
+    } else {
+        mPolicy->setParameters(p_input_nodes, p_output_nodes, p_hidden_nodes);
     }
-    
+    evaluate_inner(obj);
+}
+
+
+void model_lakecomo::evaluate_inner(double *obj) {
+
     vector<double> J ;
 
     if(Nsim < 2){ // single simulation
@@ -122,25 +116,10 @@ void model_lakecomo::evaluate(double* var, double* obj){
             obj[i] = J[i];
         }
     }else{
-        /*vector<double> Jcum(Nobj, 0.0);
-        // MC simulation 
-        for(unsigned int i = 0; i<Nsim; i++) {
-            J = simulate(i); //i
-
-            // accumulate the cost for each objective 
-            for(unsigned int k=0; k<Nobj; k++){
-                Jcum[k] += J[k];
-            }
-        }
-
-        // save average cost 
-        for(unsigned int i=0; i<Nobj; i++){
-            obj[i] = Jcum[i]/Nsim;
-        }
-        */
+        // MC simulation to be implemented
 	}
     mPolicy->clearParameters();
-    processed_data.clear();
+
 }
 
 
@@ -186,12 +165,7 @@ vector<double> model_lakecomo::simulate(int ps){
             input.push_back( ex_signal.at(i).at(t) );
             //cout <<"Exogenous signal " <<i <<"= " << ex_signal[i].getInflow(t,0) <<endl;
         }
-        // processed signals 
-        for (std::size_t i=0; i<p_param.policyInput-3-Nex; ++i) {
-            input.push_back(processed_data.at(i).at(t));
-            //cout <<"Processed signal " <<i <<"= " << processed_data.at(i).at(t) <<endl;
-        }
-        
+
         uu = mPolicy->get_NormOutput(input);
         u[t] = uu[0]; // single release decision
         
@@ -483,28 +457,6 @@ void model_lakecomo::readFileSettings(string filename){
     }
     //Return to the beginning of the file
     in.seekg(0, ios::beg);
-
-    // RAW DATA FOR POLICY INPUT
-    //Look for the <RAW_DATA> key
-    while (sJunk != "<RAW_DATA>")
-    {
-        in >> sJunk;
-    }
-    int Nraw;
-    in >> Nraw;
-    // cout << "raw data: " <<Nraw <<endl;
-    in.ignore(1000,'\n');
-    for (int i = 0; i < Nraw; ++i) {
-        std::string file0;
-        int cols = 0;
-        in >> file0;
-        in >> cols;
-        in.ignore(1000,'\n');
-
-        raw_data.push_back(utils::loadMatrix(file0,H,cols));
-        //cout << " inflow " << raw_data[i].at(0).at(0) <<endl;
-    }
-
 
     // MODEL INITIALIZATION
     //Look for the <INIT_CONDITION> key
